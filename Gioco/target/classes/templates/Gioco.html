@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gioco del Tris</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 48px;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Gioco del Tris</h2>
+    <table id="board"></table>
+    <p style="text-align:center;" id="status"></p>
+    <script>
+        const boardElem = document.getElementById("board");
+        const statusElem = document.getElementById("status");
+
+        function drawBoard(board) {
+            boardElem.innerHTML = "";
+            for (let i = 0; i < 3; i++) {
+                const row = document.createElement("tr");
+                for (let j = 0; j < 3; j++) {
+                    const cell = document.createElement("td");
+                    cell.textContent = board[i][j] === ' ' ? '' : board[i][j];
+                    cell.addEventListener("click", () => makeMove(i, j));
+                    row.appendChild(cell);
+                }
+                boardElem.appendChild(row);
+            }
+        }
+
+        async function fetchBoard() {
+            const res = await fetch("http://localhost:8080/api/tris/board");
+            const board = await res.json();
+            drawBoard(board);
+        }
+
+        async function makeMove(row, col) {
+            const res = await fetch(`http://localhost:8080/api/tris/move?row=${row}&col=${col}`, {
+                method: "POST"
+            });
+            const text = await res.text();
+
+            if (text.startsWith("WIN:")) {
+                statusElem.textContent = "Vince il giocatore " + text.split(":")[1];
+            } else if (text === "DRAW") {
+                statusElem.textContent = "Pareggio!";
+            } else if (text === "Mossa non valida") {
+                return;
+            } else {
+                statusElem.textContent = "";
+            }
+
+            fetchBoard();
+        }
+
+        fetchBoard();
+    </script>
+</body>
+</html>

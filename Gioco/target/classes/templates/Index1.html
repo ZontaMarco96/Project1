@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tris</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            vertical-align: middle;
+            border: 2px solid #000;
+        }
+
+        button {
+            width: 100%;
+            height: 100%;
+            font-size: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        .restart-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .restart-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h2>Giocatore corrente: <span th:text="${currentPlayer}"></span></h2>
+
+<h3 th:if="${winnerMessage != null}" th:text="${winnerMessage}"></h3>
+
+<table>
+    <tr th:each="i : ${#numbers.sequence(0,2)}">
+        <td th:each="j : ${#numbers.sequence(0,2)}">
+            <form th:action="@{/move}" method="post"
+                  th:if="${board[i][j]} == ' ' and winnerMessage == null">
+                <input type="hidden" name="row" th:value="${i}"/>
+                <input type="hidden" name="col" th:value="${j}"/>
+                <button type="submit"></button>
+            </form>
+            <span th:if="${board[i][j]} != ' ' or winnerMessage != null"
+                  th:text="${board[i][j]}"></span>
+        </td>
+    </tr>
+</table>
+
+<div class="restart-button" th:if="${winnerMessage != null}">
+    <form th:action="@{/reset}" method="post">
+        <button type="submit">Nuova partita</button>
+    </form>
+</div>
+</body>
+</html>

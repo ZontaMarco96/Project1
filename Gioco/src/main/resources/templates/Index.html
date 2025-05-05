@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tris</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2, h3 {
+            text-align: center;
+            font-size: 40px;
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            vertical-align: middle;
+            border: 5px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        td:hover {
+            background-color: #f0f0f0;
+        }
+
+        button {
+            width: 100%;
+            height: 100px;
+            font-size: 60px;
+            background-color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            color: #333;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        button[data-value="X"] {
+            color: #e74c3c;
+        }
+
+        button[data-value="O"] {
+            color: #2ecc71;
+        }
+
+        .restart-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .restart-button button {
+            padding: 12px 24px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .restart-button button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Giocatore corrente: <span th:text="${currentPlayer}"></span></h2>
+
+<h3 th:if="${winnerMessage != null}" th:text="${winnerMessage}"></h3>
+
+<table>
+    <tr th:each="i : ${#numbers.sequence(0,2)}">
+        <td th:each="j : ${#numbers.sequence(0,2)}">
+            <div th:switch="${board[i][j]}">
+                <!-- Se la cella è vuota e non c'è un vincitore -->
+                <form th:case="' '" th:if="${winnerMessage == null}" th:action="@{/move}" method="post">
+                    <input type="hidden" name="row" th:value="${i}" />
+                    <input type="hidden" name="col" th:value="${j}" />
+                    <button type="submit"></button>
+                </form>
+                <!-- Se la cella ha X o O, oppure c'è un vincitore -->
+                <span th:case="*"
+                      th:text="${board[i][j]}"></span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- Pulsante Nuova partita -->
+<div class="restart-button">
+    <form th:action="@{/reset}" method="post">
+        <button type="submit">Nuova partita</button>
+    </form>
+</div>
+
+</body>
+</html>

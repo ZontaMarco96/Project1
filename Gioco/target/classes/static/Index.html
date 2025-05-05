@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco del Tris</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Gioco del Tris</h1>
+    <h2>Giocatore corrente: <span th:text="${currentPlayer}"></span></h2>
+
+    <!-- Se c'è un errore, mostralo -->
+    <div th:if="${error}">
+        <p style="color: red;" th:text="${error}"></p>
+    </div>
+
+    <form action="/move" method="post">
+        <table>
+            <tr>
+                <td><button type="submit" name="row" value="0" name="col" value="0" th:text="${board[0][0]}"></button></td>
+                <td><button type="submit" name="row" value="0" name="col" value="1" th:text="${board[0][1]}"></button></td>
+                <td><button type="submit" name="row" value="0" name="col" value="2" th:text="${board[0][2]}"></button></td>
+            </tr>
+            <tr>
+                <td><button type="submit" name="row" value="1" name="col" value="0" th:text="${board[1][0]}"></button></td>
+                <td><button type="submit" name="row" value="1" name="col" value="1" th:text="${board[1][1]}"></button></td>
+                <td><button type="submit" name="row" value="1" name="col" value="2" th:text="${board[1][2]}"></button></td>
+            </tr>
+            <tr>
+                <td><button type="submit" name="row" value="2" name="col" value="0" th:text="${board[2][0]}"></button></td>
+                <td><button type="submit" name="row" value="2" name="col" value="1" th:text="${board[2][1]}"></button></td>
+                <td><button type="submit" name="row" value="2" name="col" value="2" th:text="${board[2][2]}"></button></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
